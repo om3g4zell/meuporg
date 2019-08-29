@@ -31,8 +31,8 @@ void World::init()
 
     hud.init();
     hud.setPosition(sf::Vector2f(410, 655));
-    loadMap(0);
-    //loadMap("assets/map/map1.txt");
+    //loadMap(0);
+    loadMap("assets/map/map1.txt");
     for(Entity* e : entities)
     {
         e->init();
@@ -100,10 +100,8 @@ void World::updateEntity(sf::Packet* packet)
             >> state_ui
             >> position
             >> velocity;
-
     if(this->worldId != worldId)
         return;
-
     Entity::Type type = static_cast<Entity::Type>(type_ui);
     Entity* e = getEntityById(id);
 
@@ -276,6 +274,7 @@ void World::updateEntity(sf::Packet* packet)
                 }
                 break;
             default:
+                std::cerr << "Erreur le type est inconnu : " << type << std::endl;
                 return;
                 break;
         }
@@ -311,9 +310,9 @@ void World::entityKilled(unsigned int id)
     {
         Dialog* dialog = dialogs.createDialog();
         DialogChoice* choice = dialog->addChoice();
-        choice->title = "Point de réapation:";
+        choice->title = "Point de rï¿½apation:";
         choice->possibilities["Spawn 1"] = 0;
-        choice->callback = [this](int choice){this->sendRespawnRequest(choice);};
+        choice->callback = [this](unsigned int choice){this->sendRespawnRequest(choice);};
         dialog->next();
     }
 }
@@ -324,7 +323,7 @@ void World::addEntity(unsigned int id, Entity::Type type, std::string name, sf::
 
 }
 
-void World::changeWorld(int worldId, int mapId)
+void World::changeWorld(unsigned int worldId, unsigned int mapId)
 {
     this->worldId = worldId;
     this->mapId = mapId;
@@ -337,7 +336,10 @@ void World::changeWorld(int worldId, int mapId)
     player = nullptr;
     hud.setPlayer(nullptr);
 
-    loadMap(mapId);
+    std::stringstream ss;
+    ss << "assets/map/map" << mapId << ".txt";
+    //loadMap(mapId);
+    loadMap(ss.str());
 }
 
 Entity* World::getEntityById(unsigned int id)

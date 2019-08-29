@@ -6,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Network.hpp>
+#include <sstream>
 
 #include "../Entity/Entity.hpp"
 #include "../Entity/Player.hpp"
@@ -47,7 +48,7 @@ class World : public sf::Drawable, public sf::Transformable
 
         Player* getPlayer(std::string playerName);
 
-        void changeWorld(int worldId, int mapId);
+        void changeWorld(unsigned int worldId, unsigned int mapId);
 
         void sendRespawnRequest(unsigned int spawnId);
 
